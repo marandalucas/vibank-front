@@ -3,6 +3,7 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-pages/iron-pages.js'
 import '../visor-movimientos/visor-movimientos.js'
 import '../visor-ingresos/visor-ingresos.js'
+import '../visor-usuario/visor-usuario.js'
 import '../visor-login/visor-login.js'
 import '../visor-alta-usuario/visor-alta-usuario.js'
 
@@ -28,6 +29,7 @@ class FrontvibankApp extends PolymerElement {
           <div component-name="visor-ingresos"><visor-ingresos on-myevent="processEvent" id="visorIngresos"></visor-ingresos></div>
           <div component-name="visor-movimientos"><visor-movimientos on-myevent="processEvent" id="visorMovimientos"></visor-movimientos></div>
           <div component-name="visor-login"><visor-login on-myevent="processEvent" id="visorLogin"></visor-login></div>
+          <div component-name="visor-usuario"><visor-usuario on-myevent="processEvent" id="visorUsuario"></visor-usuario></div>
           <div component-name="visor-alta-usuario"><visor-alta-usuario on-myevent="processEvent" id="visorAltaUsuario"></visor-alta-usuario></div>
       </iron-pages>
 
@@ -67,6 +69,10 @@ class FrontvibankApp extends PolymerElement {
   if (e.detail.view == "visor-alta-usuario") {
     this.$.visorLogin.UserID = e.detail.UserID;
 }
+
+  if (e.detail.view == "visor-usuario") {
+    this.$.visorUsuario.UserID = e.detail.UserID;
+  }
 
   }
 
