@@ -3,6 +3,7 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-pages/iron-pages.js'
 import '../visor-movimientos/visor-movimientos.js'
 import '../visor-ingresos/visor-ingresos.js'
+import '../visor-login/visor-login.js'
 
 /**
  * @customElement
