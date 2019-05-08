@@ -6,6 +6,8 @@
     "@polymer/app-route": "^3.0.2",
     "@polymer/iron-ajax": "^3.0.1",
     "@polymer/iron-pages": "^3.0.1",
+    "@polymer/iron-resizable-behavior": "^3.0.1",
+    "@polymer/iron-selector": "^3.0.1",
     "@polymer/polymer": "^3.2.0"
   },
   "devDependencies": {
