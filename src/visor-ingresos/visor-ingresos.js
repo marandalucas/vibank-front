@@ -12,6 +12,8 @@ class VisorIngresos extends PolymerElement {
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+      <app-location route="{{route}}"></app-location>
+
       <span hidden$="[[isDoOper]]">
         Introduzca el importe a ingresar
         <input type="number" name="amount" min="1" max="999999999" step="0.01" required="required" value="{{amount::input}}" />
@@ -21,7 +23,7 @@ class VisorIngresos extends PolymerElement {
       </span>
 
       <span hidden$="[[!isDoOper]]">Operación realizada.
-        <button on-click="sendEvent" class="btn btn-success">Aceptar</button>
+        <button on-click="exitOper" class="btn btn-success">Aceptar</button>
       </span>
 
       <iron-ajax
@@ -40,14 +42,17 @@ class VisorIngresos extends PolymerElement {
   static get properties() {
     return {
       idAccount: {
-        type: Number
+          type: Number
       },operType: {
-        type: Number
+          type: Number
       },amount: {
-        type: Number
+          type: Number,
+          value: 0
       },isDoOper:{
           type: Boolean,
           value: false
+      },route: {
+          type: Object
       }
     };
   } // End properties
@@ -85,29 +90,13 @@ class VisorIngresos extends PolymerElement {
     console.log(error.detail.request.xhr.response);
   }
 
-  sendEvent(e) {
+  exitOper(e) {
       console.log("Botón pulsado");
       console.log(e);
 
-      this.dispatchEvent(
-          new CustomEvent(
-              "myevent",
-              {
-                  "detail" : {
-                      "view" : "visor-movimientos",
-                      "idAccount":this.idAccount
-                  }
-              }
-          )
-      )
-  }
-
-  processEvent(e){
-    console.log("Capturado evento del emisor");
-    console.log(e);
-
-    this.isDoOper = false;
-
+      this.set('route.path', '/visor-movimientos');
+      this.isDoOper = false;
+      this.amount = 0;
   }
 
 } // End class
