@@ -3,6 +3,7 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-pages/iron-pages.js'
 import '../visor-movimientos/visor-movimientos.js'
 import '../visor-ingresos/visor-ingresos.js'
+import '../visor-login/visor-login.js'
 
 /**
  * @customElement
@@ -25,6 +26,7 @@ class FrontvibankApp extends PolymerElement {
       <iron-pages selected="[[viewName]]" attr-for-selected="component-name">
           <div component-name="visor-ingresos"><visor-ingresos on-myevent="processEvent" id="visorIngresos"></visor-ingresos></div>
           <div component-name="visor-movimientos"><visor-movimientos on-myevent="processEvent" id="visorMovimientos"></visor-movimientos></div>
+          <div component-name="visor-login"><visor-login on-myevent="processEvent" id="visorLogin"></visor-login></div>
       </iron-pages>
 
     `;
@@ -35,7 +37,7 @@ class FrontvibankApp extends PolymerElement {
     return {
       viewName:{
           type: String,
-          value: "visor-movimientos"
+          value: "visor-login"
       }
     };
   } // End properties
@@ -45,7 +47,7 @@ class FrontvibankApp extends PolymerElement {
 
     console.log("Capturado evento del emisor");
     console.log(e);
-    
+
     this.viewName= e.detail.view
     if (e.detail.view == "visor-movimientos") {
         this.$.visorMovimientos.idAccount = e.detail.idAccount;
@@ -55,6 +57,10 @@ class FrontvibankApp extends PolymerElement {
         this.$.visorIngresos.idAccount = e.detail.idAccount;
         this.$.visorIngresos.operType = e.detail.operType;
     }
+
+    if (e.detail.view == "visor-login") {
+      this.$.visorLogin.UserID = e.detail.UserID;
+  }
 
   }
 
