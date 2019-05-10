@@ -6,6 +6,9 @@ import '@polymer/app-route/app-location.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '../visor-movimientos/visor-movimientos.js';
 import '../visor-ingresos/visor-ingresos.js';
+import '../visor-usuario/visor-usuario.js'
+import '../visor-login/visor-login.js'
+import '../visor-alta-usuario/visor-alta-usuario.js'
 
 /**
  * @customElement
@@ -85,6 +88,18 @@ class FrontvibankApp extends PolymerElement {
         this.$.visorIngresos.idAccount = e.detail.idAccount;
         this.$.visorIngresos.operType = e.detail.operType;
     }
+
+    if (e.detail.view == "visor-login") {
+      this.$.visorLogin.UserID = e.detail.UserID;
+  }
+
+  if (e.detail.view == "visor-alta-usuario") {
+    this.$.visorLogin.UserID = e.detail.UserID;
+}
+
+  if (e.detail.view == "visor-usuario") {
+    this.$.visorUsuario.UserID = e.detail.UserID;
+  }
 
   }
 
