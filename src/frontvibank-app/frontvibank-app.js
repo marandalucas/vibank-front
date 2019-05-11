@@ -5,9 +5,10 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '../visor-movimientos/visor-movimientos.js';
-import '../visor-ingresos/visor-ingresos.js';
+import '../visor-operaciones/visor-operaciones.js';
 import '../visor-usuario/visor-usuario.js'
 import '../visor-login/visor-login.js'
+import '../visor-cuentas/visor-cuenta.js'
 import '../visor-alta-usuario/visor-alta-usuario.js'
 
 /**
@@ -43,22 +44,42 @@ class FrontvibankApp extends PolymerElement {
       >
       </app-route>
 
+      <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-8"><h1>ViBank</h1></div>
+          <div class="col-md-2" align="right">
+              <span hidden$="[[!isLogged]]">
+                  <visor-usuario></visor-usuario>
+              </span>
+          </div>
+          <div class="col-md-1">
+              <span hidden$="[[isEnterLogin]]">
+                  <span hidden$="[[isLogged]]">
+                      <button on-click="doLogin" class="btn btn-info">Login</button>
+                  </span>
+              </span>
+              <span hidden$="[[!isLogged]]">
+                  <button on-click="doLogout" class="btn btn-info">Logout</button>
+              </span>
+          </div>
+      </div>
+      <br>
+
       <iron-pages selected="[[routeData.resource]]" attr-for-selected="component-name">
 
-          <div component-name="visor-movimientos">
+          <div component-name="visor-login">
+              <visor-login id="visorLogin"></visor-login>
+          </div>
 
+          <div component-name="visor-movimientos">
               <template is="dom-if" if="{{isEqual(routeData.resource, 'visor-movimientos')}}" restamp="true">
+                  <visor-cuenta id="visorCuenta"></visor-cuenta>
                   <visor-movimientos on-myevent="processEvent" id="visorMovimientos"></visor-movimientos>
               </template>
-
           </div>
 
-          <div component-name="visor-ingresos">
-              <visor-ingresos on-myevent="processEvent" id="visorIngresos"></visor-ingresos>
-          </div>
-
-          <div component-name="visor-movimiento">
-              <visor-ingresos on-myevent="processEvent" id="visorMovimiento"></visor-ingresos>
+          <div component-name="visor-operaciones">
+              <visor-operaciones id="visorOperaciones"></visor-operaciones>
           </div>
 
       </iron-pages>
@@ -69,6 +90,14 @@ class FrontvibankApp extends PolymerElement {
 
   static get properties() {
     return {
+      isLogged:{
+        type: Boolean,
+        value:false
+      },
+      isEnterLogin:{
+        type: Boolean,
+        value:false
+      },
       route: {
         type: Object
       },
@@ -84,27 +113,27 @@ class FrontvibankApp extends PolymerElement {
     console.log("Capturado evento del emisor");
     console.log(e);
 
-    if (this.routeData.resource == "visor-ingresos") {
-        this.$.visorIngresos.idAccount = e.detail.idAccount;
-        this.$.visorIngresos.operType = e.detail.operType;
+    if (this.routeData.resource == "visor-operaciones") {
+        this.$.visorOperaciones.idAccount = e.detail.idAccount;
+        this.$.visorOperaciones.operType = e.detail.operType;
+
+        if (e.detail.operType == 1 || e.detail.operType == 2){
+            this.$.visorOperaciones.isDoTransfer = false;
+        }else{
+            this.$.visorOperaciones.isDoTransfer = true;
+        }
     }
 
-    if (e.detail.view == "visor-login") {
-      this.$.visorLogin.UserID = e.detail.UserID;
   }
 
-  if (e.detail.view == "visor-alta-usuario") {
-    this.$.visorLogin.UserID = e.detail.UserID;
-}
-
-  if (e.detail.view == "visor-usuario") {
-    this.$.visorUsuario.UserID = e.detail.UserID;
-  }
-
+  doLogin() {
+    console.log("ha presionado el boton");
+      this.set('route.path', '/visor-login');
+      this.isEnterLogin = true;
   }
 
   isEqual(x, y) {
-    return x === y;
+      return x === y;
   }
 
 } // End class

@@ -8,16 +8,21 @@ import '@polymer/iron-ajax/iron-ajax.js';
 class visorLogin extends PolymerElement {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
-      <input type="email" placeholder="email" value="{{email::input}}" />
-      <br />
-      <input type="password" placeholder="password" value="{{password::input}}" />
-      <br />
-      <button on-click="login">Login</button>
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+      <div class="row">
+          <div class="col-md-12" align="center"><input type="email" placeholder="email" value="{{email::input}}"/></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-12" align="center"><input type="password" placeholder="password" value="{{password::input}}" /></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-12" align="center"><button on-click="login" class="btn btn-info">Login</button></div>
+      </div>
+
       <span hidden$="[[!isLogged]]">Bienvenido/a de nuevo</span>
 
       <iron-ajax
@@ -54,8 +59,6 @@ class visorLogin extends PolymerElement {
     this.$.doLogin.body = JSON.stringify(loginData);
     this.$.doLogin.generateRequest();
 
-    // console.log("loding data es" + loginData); PROBLEMA NOOOO!!
-    // console.log(loginData);
   }
   // vienen del on-response y error
   manageAJAXResponse(data) {

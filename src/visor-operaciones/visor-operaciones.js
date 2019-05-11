@@ -6,7 +6,7 @@ import '@polymer/iron-ajax/iron-ajax.js';
  * @polymer
  */
 
-class VisorIngresos extends PolymerElement {
+class VisorOperaciones extends PolymerElement {
   static get template() {
   return html`
 
@@ -15,14 +15,29 @@ class VisorIngresos extends PolymerElement {
       <app-location route="{{route}}"></app-location>
 
       <span hidden$="[[isDoOper]]">
-        Introduzca el importe a ingresar
-        <input type="number" name="amount" min="1" max="999999999" step="0.01" required="required" value="{{amount::input}}" />
+        <h4>Importe operación
+            <input type="number" name="amount" min="1" max="999999999" step="0.01" required="required" value="{{amount::input}}" />
+        </h4>
         <br></br>
+        <span hidden$="[[!isDoTransfer]]">
+            <br>
+            <h4>IBAN
+                <input  name="IBAN"  required="required" value="{{IBAN::input}}" />
+            </h4>
+            <h4>Concept
+                <input  name="concept"  required="required" value="{{concept::input}}" />
+            </h4>
+            <h4>Nombre destinatario
+                <input  name="destinationName"  required="required" value="{{destinationName::input}}" />
+            </h4>
+        </span>
+        <br>
         <button on-click="doOper" class="btn btn-success">Aceptar</button>
-        <br></br>
+        <br>
       </span>
 
-      <span hidden$="[[!isDoOper]]">Operación realizada.
+      <span hidden$="[[!isDoOper]]">
+        Operación realizada.
         <button on-click="exitOper" class="btn btn-success">Aceptar</button>
       </span>
 
@@ -48,7 +63,19 @@ class VisorIngresos extends PolymerElement {
       },amount: {
           type: Number,
           value: 0
+      },IBAN: {
+          type: String,
+          value:""
+      },concept: {
+          type: String,
+          value:""
+      },destinationName: {
+          type: String,
+          value:""
       },isDoOper:{
+          type: Boolean,
+          value: false
+      },isDoTransfer:{
           type: Boolean,
           value: false
       },route: {
@@ -61,10 +88,21 @@ class VisorIngresos extends PolymerElement {
 
     console.log("El usuario ha pulsado el botón");
 
-    var operData = {
-        "idAccount":this.idAccount,
-        "operType":this.operType,
-        "amount":this.amount,
+    if (this.operType == 1 || this.operType == 2){
+      var operData = {
+          "idAccount":this.idAccount,
+          "operType":this.operType,
+          "amount":this.amount
+      }
+    }else{
+      var operData = {
+          "idAccount":this.idAccount,
+          "operType":this.operType,
+          "amount":this.amount,
+          "IBAN":this.IBAN,
+          "concept":this.concept,
+          "destinationName":this.estinationName
+      }
     }
 
     console.log(JSON.stringify(operData));
@@ -101,4 +139,4 @@ class VisorIngresos extends PolymerElement {
 
 } // End class
 
-window.customElements.define('visor-ingresos', VisorIngresos);
+window.customElements.define('visor-operaciones', VisorOperaciones);

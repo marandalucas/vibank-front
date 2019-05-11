@@ -6,23 +6,24 @@ import '@polymer/iron-ajax/iron-ajax.js';
  * @polymer
  */
 
-class VisorUsuario extends PolymerElement {
+class VisorCuenta extends PolymerElement {
   static get template() {
   return html`
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
     <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-8"><h1>ViBank</h1></div>
-        <div class="col-md-2" align="right">[[first_name]] [[last_name]]</div>
+        <div class="col-md-2"></div>
+        <div class="col-md-1" align="right"><h5>IBAN</h5></div>
+        <div class="col-md-3" align="left"><h5>[[IBAN]]</h5></div>
+        <div class="col-md-1" align="right"><h5>Saldo</h5></div>
+        <div class="col-md-1" align="left"><h5>[[balance]]</h5></div>
     </div>
 
     <iron-ajax
       auto
-      id="getUser"
-      url="http://localhost:3000/vibank/v1/user/{{id}}"
+      id="getAccount"
+      url="http://localhost:3000/vibank/v1/account/{{idAccount}}"
       handle-as="json"
       on-response="showData"
     >
@@ -31,15 +32,15 @@ class VisorUsuario extends PolymerElement {
 }
 static get properties() {
   return {
-    first_name: {
+    IBAN: {
       type: String
-    },last_name: {
-      type: String
-    },email: {
-      type: String
-    },id: {
+    },
+    idAccount: {
       type: Number,
       value: 1
+    },
+    balance: {
+      type: Number
     }
   };
 } // End properties
@@ -48,14 +49,12 @@ showData(data) {
 
   console.log("showData");
   console.log(data.detail.response);
-  console.log(data.detail.response.first_name);
 
-  this.first_name = data.detail.response.first_name;
-  this.last_name = data.detail.response.last_name;
-  this.email = data.detail.response.email;
+  this.IBAN = data.detail.response.IBAN;
+  this.balance = data.detail.response.balance;
 
 }
 
 } // End class
 
-window.customElements.define('visor-usuario', VisorUsuario);
+window.customElements.define('visor-cuenta', VisorCuenta);
