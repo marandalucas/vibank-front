@@ -5,6 +5,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '../visor-movimientos/visor-movimientos.js';
+import '../visor-movimientos/visor-movimiento.js';
 import '../visor-operaciones/visor-operaciones.js';
 import '../visor-usuario/visor-usuario.js'
 import '../visor-login/visor-login.js'
@@ -46,21 +47,26 @@ class FrontvibankApp extends PolymerElement {
 
       <div class="row">
           <div class="col-md-1"></div>
-          <div class="col-md-8"><h1>ViBank</h1></div>
+          <div class="col-md-7"><img src="./images/logo.png" width="50%" height="80%" /></div>
           <div class="col-md-2" align="right">
               <span hidden$="[[!isLogged]]">
                   <visor-usuario></visor-usuario>
               </span>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-2" align="rigth">
               <span hidden$="[[isEnterLogin]]">
                   <span hidden$="[[isLogged]]">
-                      <button on-click="doLogin" class="btn btn-info">Login</button>
+                      <button on-click="doLogin" class="btn btn-info">Entrar</button>
                   </span>
               </span>
               <span hidden$="[[!isLogged]]">
-                  <button on-click="doLogout" class="btn btn-info">Logout</button>
+                  <button on-click="doLogout" class="btn btn-info">Salir</button>
               </span>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12" align="center">
+              <img src="./images/linea.png" />
           </div>
       </div>
       <br>
@@ -80,6 +86,11 @@ class FrontvibankApp extends PolymerElement {
 
           <div component-name="visor-operaciones">
               <visor-operaciones id="visorOperaciones"></visor-operaciones>
+          </div>
+
+          <div component-name="visor-movimiento">
+              <visor-cuenta id="visorCuenta"></visor-cuenta>
+              <visor-movimiento id="visorMovimiento"></visor-movimiento>
           </div>
 
       </iron-pages>
@@ -114,6 +125,7 @@ class FrontvibankApp extends PolymerElement {
     console.log(e);
 
     if (this.routeData.resource == "visor-operaciones") {
+
         this.$.visorOperaciones.idAccount = e.detail.idAccount;
         this.$.visorOperaciones.operType = e.detail.operType;
 
@@ -122,6 +134,10 @@ class FrontvibankApp extends PolymerElement {
         }else{
             this.$.visorOperaciones.isDoTransfer = true;
         }
+    }
+
+    if (this.routeData.resource == "visor-movimiento") {
+       this.$.visorMovimiento.idOper = e.detail.idOper;
     }
 
   }

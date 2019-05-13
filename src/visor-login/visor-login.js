@@ -11,16 +11,27 @@ class visorLogin extends PolymerElement {
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+      <br>
+      <br>
       <div class="row">
-          <div class="col-md-12" align="center"><input type="email" placeholder="email" value="{{email::input}}"/></div>
+          <div class="col-md-12" align="center"><h5>Introduce tu usuario y clave de acceso</h5></div>
+      </div>
+      <br>
+      <br>
+      <div class="row">
+          <div class="col-md-12" align="center"><input type="email" placeholder="Usuario (email)" value="{{email::input}}"/></div>
       </div>
       <br>
       <div class="row">
-          <div class="col-md-12" align="center"><input type="password" placeholder="password" value="{{password::input}}" /></div>
+          <div class="col-md-12" align="center"><input type="password" placeholder="Clave de accceso" value="{{password::input}}" /></div>
       </div>
       <br>
       <div class="row">
-          <div class="col-md-12" align="center"><button on-click="login" class="btn btn-info">Login</button></div>
+          <div class="col-md-12" align="center"><button on-click="login" class="btn btn-info">Entrar</button></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-12" align="center">Registrar nuevo usuario</div>
       </div>
 
       <span hidden$="[[!isLogged]]">Bienvenido/a de nuevo</span>

@@ -1,6 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/app-route/app-location.js';
 
 /**
  * @customElement
@@ -11,39 +12,62 @@ class VisorMovimientos extends PolymerElement {
   static get template() {
     return html`
 
+      <style>
+
+          .bluecell {
+              background-color: #015C80;
+              color: white;
+          }
+
+      </style>
+
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
       <app-location route="{{route}}"></app-location>
-      <app-route
-            route="{{route}}"
-            pattern="/:resource/:id"
-            data="{{routeData}}"
-      >
-      </app-route>
-      <h4>Movimientos</h4>
-      <br>
+
+      <br><br><br><br>
+
       <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-4">Tipo operación</div>
-          <div class="col-md-1">Importe</div>
-          <div class="col-md-1">Saldo</div>
-      </div>
-      <template is="dom-repeat" items="[[operations]]">
-          <div class="row">
-              <div class="col-md-3"></div>
-              <div class="col-md-4"><img src="../../images/icon-lupa.png" alt="Consulta movimiento" width="20" height="20">
-                  [[item.descOperType]]
+          <div class="col-md-10">
+              <div class="row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; Tipo operación</div>
+                  <div class="col-md-1 bluecell">Importe</div>
+                  <div class="col-md-1 bluecell">Saldo</div>
               </div>
-              <div class="col-md-1">[[item.sign]][[item.amount]]</div>
-              <div class="col-md-1">[[item.balance]]</div>
+              <br>
+              <template is="dom-repeat" items="[[operations]]">
+                  <div class="row">
+                      <div class="col-md-3"></div>
+                      <div class="col-md-4">
+                          <button class="btn" on-click="consultaMovimiento" id="[[item.idOper]]">
+                            <img src="../../images/icon-lupa.png" alt="Consulta movimiento" width="20" height="20" id="[[item.idOper]]"/>
+                          </button>
+                          [[item.descOperType]]
+                      </div>
+                      <div class="col-md-1">[[item.sign]][[item.amount]]</div>
+                      <div class="col-md-1">[[item.balance]]</div>
+                  </div>
+              </template>
           </div>
-      </template>
+
+          <div class="col-md-2">
+              <h5>Operaciones</h5>
+              <div class="row">
+                  <button on-click="realizarOperacion" id="btn-ingreso" heigh="5" class="btn btn-info">Ingreso</button>
+              </div>
+              <br>
+              <div class="row">
+                  <button on-click="realizarOperacion" id="btn-reintegro" heigh="10" class="btn btn-info">Reintegro</button>
+              </div>
+              <br>
+              <div class="row">
+                  <button on-click="realizarOperacion" id="btn-transferencia" heigh="10" class="btn btn-info">Transferencia</button>
+              </div>
+          </div>
+      </div>
 
       <br>
-      <button on-click="sendEvent" id="btn-ingreso" class="btn btn-info">Realizar ingreso</button>
-      <button on-click="sendEvent" id="btn-reintegro" class="btn btn-info">Realizar reintegro</button>
-      <button on-click="sendEvent" id="btn-transferencia" class="btn btn-info">Realizar transferencia</button>
-
 
       <iron-ajax
         auto
@@ -74,6 +98,7 @@ class VisorMovimientos extends PolymerElement {
   } // End properties
 
   showDataOpers(data) {
+
     console.log("showDataOper");
     console.log(data.detail.response);
 
@@ -87,9 +112,10 @@ class VisorMovimientos extends PolymerElement {
     console.log(error.detail.request.xhr.response);
   }
 
-  sendEvent(e) {
+  realizarOperacion(e) {
 
-      console.log("Botón pulsado");
+      console.log("Botón operación pulsado");
+      console.log(e.srcElement.id);
       if (e.srcElement.id == "btn-ingreso"){
           var operType = 1;
       } else if (e.srcElement.id == "btn-reintegro"){
@@ -112,6 +138,26 @@ class VisorMovimientos extends PolymerElement {
           )
       )
   }
+
+  consultaMovimiento(e) {
+
+      console.log("Botón consulta movimiento pulsado");
+      console.log(e.srcElement.id);
+
+      this.set('route.path', '/visor-movimiento');
+
+      this.dispatchEvent(
+          new CustomEvent(
+              "myevent",
+              {
+                  "detail" : {
+                      "idOper":e.srcElement.id
+                  }
+              }
+          )
+      )
+  }
+
 
 
 } // End class

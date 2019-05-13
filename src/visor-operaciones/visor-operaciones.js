@@ -1,5 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/app-route/app-location.js';
 
 /**
  * @customElement
@@ -32,13 +33,13 @@ class VisorOperaciones extends PolymerElement {
             </h4>
         </span>
         <br>
-        <button on-click="doOper" class="btn btn-success">Aceptar</button>
+        <button on-click="doOper" class="btn btn-info">Aceptar</button>
         <br>
       </span>
 
       <span hidden$="[[!isDoOper]]">
         Operación realizada.
-        <button on-click="exitOper" class="btn btn-success">Aceptar</button>
+        <button on-click="exitOper" class="btn btn-info">Aceptar</button>
       </span>
 
       <iron-ajax
@@ -101,7 +102,7 @@ class VisorOperaciones extends PolymerElement {
           "amount":this.amount,
           "IBAN":this.IBAN,
           "concept":this.concept,
-          "destinationName":this.estinationName
+          "destinationName":this.destinationName
       }
     }
 
