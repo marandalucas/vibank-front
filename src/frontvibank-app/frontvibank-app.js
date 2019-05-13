@@ -9,8 +9,10 @@ import '../visor-movimientos/visor-movimiento.js';
 import '../visor-operaciones/visor-operaciones.js';
 import '../visor-usuario/visor-usuario.js'
 import '../visor-login/visor-login.js'
+import '../visor-cuentas-usuario/visor-cuentas-usuario.js'
 import '../visor-cuentas/visor-cuenta.js'
 import '../visor-alta-usuario/visor-alta-usuario.js'
+import '../visor-alta-cuenta/visor-alta-cuenta.js'
 
 /**
  * @customElement
@@ -75,6 +77,13 @@ class FrontvibankApp extends PolymerElement {
 
           <div component-name="visor-login">
               <visor-login id="visorLogin"></visor-login>
+          </div>
+
+          <div component-name="visor-cuentas-usuario">
+              <visor-cuentas-usuario id="visorCuentasUsuario"></visor-cuentas-usuario>
+          </div>
+          <div component-name="visor-alta-cuenta">
+              <visor-alta-cuenta id="visorAltaCuenta"></visor-alta-cuenta>
           </div>
 
           <div component-name="visor-movimientos">
