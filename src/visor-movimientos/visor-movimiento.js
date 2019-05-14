@@ -50,7 +50,7 @@ class VisorMovimiento extends PolymerElement {
       id="getOper"
       url="http://localhost:3000/vibank/v1/oper/{{idOper}}"
       handle-as="json"
-      on-response="showData"
+      on-response="showDataOper"
     >
     </iron-ajax>
   `;
@@ -85,10 +85,7 @@ static get properties() {
   };
 } // End properties
 
-showData(data) {
-
-  console.log("showData");
-  console.log(data.detail.response);
+showDataOper(data) {
 
   this.descopertype = data.detail.response.descOperType;
   this.destinationname = data.detail.response.destinationName;

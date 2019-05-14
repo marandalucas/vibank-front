@@ -31,6 +31,10 @@ class VisorMovimientos extends PolymerElement {
           <div class="col-md-10">
               <div class="row">
                   <div class="col-md-3"></div>
+                  <div class="col-md-4"><h5>&nbsp;&nbsp;&nbsp; Movimientos de cuenta</h5></div>
+              </div>
+              <div class="row">
+                  <div class="col-md-3"></div>
                   <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; Tipo operación</div>
                   <div class="col-md-1 bluecell">Importe</div>
                   <div class="col-md-1 bluecell">Saldo</div>
@@ -86,7 +90,7 @@ class VisorMovimientos extends PolymerElement {
     return {
       idAccount: {
         type: Number,
-        value:1
+        value:0
       },
       operations: {
         type: Array
@@ -98,9 +102,6 @@ class VisorMovimientos extends PolymerElement {
   } // End properties
 
   showDataOpers(data) {
-
-    console.log("showDataOper");
-    console.log(data.detail.response);
 
     this.operations = data.detail.response;
 
@@ -114,8 +115,6 @@ class VisorMovimientos extends PolymerElement {
 
   realizarOperacion(e) {
 
-      console.log("Botón operación pulsado");
-      console.log(e.srcElement.id);
       if (e.srcElement.id == "btn-ingreso"){
           var operType = 1;
       } else if (e.srcElement.id == "btn-reintegro"){
@@ -137,14 +136,12 @@ class VisorMovimientos extends PolymerElement {
               }
           )
       )
+
   }
 
   consultaMovimiento(e) {
 
       console.log("Botón consulta movimiento pulsado");
-      console.log(e.srcElement.id);
-
-      this.set('route.path', '/visor-movimiento');
 
       this.dispatchEvent(
           new CustomEvent(
@@ -156,6 +153,8 @@ class VisorMovimientos extends PolymerElement {
               }
           )
       )
+
+      this.set('route.path', '/visor-movimiento');
   }
 
 

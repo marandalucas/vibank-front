@@ -10,21 +10,14 @@ class VisorUsuario extends PolymerElement {
   static get template() {
   return html`
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-8"><h1>ViBank</h1></div>
-        <div class="col-md-2" align="right">[[first_name]] [[last_name]]</div>
-    </div>
+    <div align="right">[[first_name]] [[last_name]]</div>
 
     <iron-ajax
       auto
       id="getUser"
-      url="http://localhost:3000/vibank/v1/user/{{id}}"
+      url="http://localhost:3000/vibank/v1/user/{{idUser}}"
       handle-as="json"
-      on-response="showData"
+      on-response="showDataUser"
     >
     </iron-ajax>
   `;
@@ -37,18 +30,13 @@ static get properties() {
       type: String
     },email: {
       type: String
-    },id: {
-      type: Number,
-      value: 1
+    },idUser: {
+      type: Number
     }
   };
 } // End properties
 
-showData(data) {
-
-  console.log("showData");
-  console.log(data.detail.response);
-  console.log(data.detail.response.first_name);
+showDataUser(data) {
 
   this.first_name = data.detail.response.first_name;
   this.last_name = data.detail.response.last_name;

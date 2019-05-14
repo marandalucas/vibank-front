@@ -87,8 +87,6 @@ class VisorOperaciones extends PolymerElement {
 
   doOper() {
 
-    console.log("El usuario ha pulsado el botón");
-
     if (this.operType == 1 || this.operType == 2){
       var operData = {
           "idAccount":this.idAccount,
@@ -106,18 +104,13 @@ class VisorOperaciones extends PolymerElement {
       }
     }
 
-    console.log(JSON.stringify(operData));
     this.$.doOper.body = JSON.stringify(operData);
     this.$.doOper.generateRequest();
-
-    console.log(operData);
+    console.log("cuenta 1: " + this.idAccount);
 
   }
 
   manageAJAXResponse(data) {
-
-    console.log("Llegaron los resultados");
-    console.log(data.detail.response);
 
     this.isDoOper = true;
 
@@ -130,12 +123,25 @@ class VisorOperaciones extends PolymerElement {
   }
 
   exitOper(e) {
-      console.log("Botón pulsado");
-      console.log(e);
 
-      this.set('route.path', '/visor-movimientos');
       this.isDoOper = false;
       this.amount = 0;
+      console.log("hola");
+      console.log("idcuenta: " + this.idAccount);
+
+      this.set('route.path', '/visor-movimientos');
+
+      this.dispatchEvent(
+          new CustomEvent(
+                "myevent",
+                {
+                    "detail" : {
+                        "idAccount":this.idAccount
+                    }
+                }
+            )
+        )
+
   }
 
 } // End class
