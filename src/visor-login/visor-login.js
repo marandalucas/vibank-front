@@ -1,5 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/app-route/app-location.js';
 
 /**
  * @customElement
@@ -10,6 +11,8 @@ class visorLogin extends PolymerElement {
     return html`
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+      <app-location route="{{route}}"></app-location>
 
       <br>
       <br>
@@ -31,10 +34,8 @@ class visorLogin extends PolymerElement {
       </div>
       <br>
       <div class="row">
-          <div class="col-md-12" align="center">Registrar nuevo usuario</div>
+          <div class="col-md-12" align="center"><a href="#" on-click="goNewUser">Registrar nuevo usuario</a></div>
       </div>
-
-      <span hidden$="[[!isLogged]]">Bienvenido/a de nuevo</span>
 
       <iron-ajax
         id="doLogin"
@@ -51,16 +52,18 @@ class visorLogin extends PolymerElement {
     return {
       password: {
         type: String
-      }, email: {
+      },email: {
         type: String
-      }, isLogged: {
-        type: Boolean,
-        value: false
+      },idUser: {
+        type: Number
+      },
+      route: {
+        type: Object
       }
     };
-  } // End Properties+
+  } // End Properties
+
   login() {
-    console.log("El usuario ha pulsado el botón");
 
     var loginData = {
       "email": this.email,
@@ -71,30 +74,43 @@ class visorLogin extends PolymerElement {
     this.$.doLogin.generateRequest();
 
   }
-  // vienen del on-response y error
-  manageAJAXResponse(data) {
-      console.log("Llegaron los resultados2");
-      console.log(data.detail.response);
-      console.log(data.detail.response.UserID);
 
-      this.isLogged = true;
+  manageAJAXResponse(data) {
+
+      this.idUser = data.detail.response.UserID
+      this.password = "";
+      this.email = "";
+
+      // this.set('route.path', '/visor-cuentas');
+      this.set('route.path', '/visor-movimientos');
 
       this.dispatchEvent(
         new CustomEvent(
-          "loginSuccess",
+          "myevent",
           {
             "detail" : {
-              "userid" : data.detail.response.UserID
+              // "userid" : data.detail.response.UserID
+              "idUser":this.idUser,
+              "idAccount": 1,
+              "isLogged": true
             }
           }
         )
       )
   }
+
   showError(error){
     console.log("hubo un error");
     console.log(error);
     console.log(error.detail.request.xhr.response);
   }
+
+  goNewUser() {
+
+    this.set('route.path', '/visor-alta-usuario');
+
+  }
+
 } // End Class
 
 window.customElements.define('visor-login', visorLogin);

@@ -3,13 +3,14 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/app-route/app-location.js';
-import '@polymer/polymer/lib/elements/dom-if.js';
 import '../visor-movimientos/visor-movimientos.js';
 import '../visor-movimientos/visor-movimiento.js';
 import '../visor-operaciones/visor-operaciones.js';
 import '../visor-usuario/visor-usuario.js'
+import '../visor-alta-usuario/visor-alta-usuario.js'
 import '../visor-login/visor-login.js'
 import '../visor-cuentas-usuario/visor-cuentas-usuario.js'
+import '../visor-logout/visor-logout.js'
 import '../visor-cuentas/visor-cuenta.js'
 import '../visor-alta-usuario/visor-alta-usuario.js'
 import '../visor-alta-cuenta/visor-alta-cuenta.js'
@@ -22,12 +23,6 @@ import '../visor-alta-cuenta/visor-alta-cuenta.js'
 class FrontvibankApp extends PolymerElement {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
-
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
       <br/>
@@ -49,10 +44,10 @@ class FrontvibankApp extends PolymerElement {
 
       <div class="row">
           <div class="col-md-1"></div>
-          <div class="col-md-7"><img src="./images/logo.png" width="50%" height="80%" /></div>
-          <div class="col-md-2" align="right">
+          <div class="col-md-6"><img src="./images/logo.png" width="50%" height="80%" /></div>
+          <div class="col-md-3" align="right">
               <span hidden$="[[!isLogged]]">
-                  <visor-usuario></visor-usuario>
+                  <visor-usuario on-myevent="processEvent" id="visorUsuario"></visor-usuario>
               </span>
           </div>
           <div class="col-md-2" align="rigth">
@@ -76,7 +71,15 @@ class FrontvibankApp extends PolymerElement {
       <iron-pages selected="[[routeData.resource]]" attr-for-selected="component-name">
 
           <div component-name="visor-login">
-              <visor-login id="visorLogin"></visor-login>
+              <visor-login on-myevent="processEvent" id="visorLogin"></visor-login>
+          </div>
+
+          <div component-name="visor-logout">
+              <visor-logout on-myevent="processEvent" id="visorLogout"></visor-logout>
+          </div>
+
+          <div component-name="visor-alta-usuario">
+              <visor-alta-usuario on-myevent="processEvent" id="visorAltaUsuario"></visor-alta-usuario>
           </div>
 
           <div component-name="visor-cuentas-usuario">
@@ -87,19 +90,17 @@ class FrontvibankApp extends PolymerElement {
           </div>
 
           <div component-name="visor-movimientos">
-              <template is="dom-if" if="{{isEqual(routeData.resource, 'visor-movimientos')}}" restamp="true">
-                  <visor-cuenta id="visorCuenta"></visor-cuenta>
-                  <visor-movimientos on-myevent="processEvent" id="visorMovimientos"></visor-movimientos>
-              </template>
+              <visor-cuenta id="visorCuenta"></visor-cuenta>
+              <visor-movimientos on-myevent="processEvent" id="visorMovimientos"></visor-movimientos>
           </div>
 
           <div component-name="visor-operaciones">
-              <visor-operaciones id="visorOperaciones"></visor-operaciones>
+              <visor-operaciones on-myevent="processEvent" id="visorOperaciones"></visor-operaciones>
           </div>
 
           <div component-name="visor-movimiento">
               <visor-cuenta id="visorCuenta"></visor-cuenta>
-              <visor-movimiento id="visorMovimiento"></visor-movimiento>
+              <visor-movimiento on-myevent="processEvent" id="visorMovimiento"></visor-movimiento>
           </div>
 
       </iron-pages>
@@ -133,6 +134,24 @@ class FrontvibankApp extends PolymerElement {
     console.log("Capturado evento del emisor");
     console.log(e);
 
+    if(e.detail.isLogged){
+
+      this.isLogged = e.detail.isLogged;
+      this.$.visorUsuario.idUser = e.detail.idUser;
+      this.$.visorLogout.idUser = e.detail.idUser;
+      this.idUser = e.detail.idUser;
+
+    }else{
+
+      this.isLogged = e.detail.isLogged
+      this.idUser = 0;
+      this.$.visorUsuario.idUser = 0;
+      this.$.visorMovimientos.idAccount = 0;
+      this.$.visorMovimiento.idOper = 0;
+      this.isEnterLogin = true;
+      console.log("hola");
+    }
+
     if (this.routeData.resource == "visor-operaciones") {
 
         this.$.visorOperaciones.idAccount = e.detail.idAccount;
@@ -149,16 +168,20 @@ class FrontvibankApp extends PolymerElement {
        this.$.visorMovimiento.idOper = e.detail.idOper;
     }
 
+    if (this.routeData.resource == "visor-movimientos") {
+       this.$.visorMovimientos.idAccount = e.detail.idAccount;
+    }
+
   }
 
   doLogin() {
-    console.log("ha presionado el boton");
       this.set('route.path', '/visor-login');
       this.isEnterLogin = true;
   }
 
-  isEqual(x, y) {
-      return x === y;
+  doLogout() {
+
+      this.set('route.path', '/visor-logout');
   }
 
 } // End class
