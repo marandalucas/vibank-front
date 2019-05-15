@@ -4,7 +4,7 @@ FROM nginx:1.12.0
 ADD ./nginx.conf /etc/nginx/nginx.conf
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-ADD /build/default/ /usr/share/nginx/html
+ADD ./build/default/ /usr/share/nginx/html
 
 EXPOSE 8080
 
