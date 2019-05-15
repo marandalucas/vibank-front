@@ -29,6 +29,8 @@ pipelines:
             # build and test the Node app
             - npm install
             - polymer build --sources images/*
+          artifacts: # defining the artifacts to be passed to each future step.
+              - build/**
       - step:
           name: Build Docker Image & Docker Push Image
           script:
@@ -50,6 +52,8 @@ pipelines:
             # build and test the Node app
             - npm install
             - polymer build --sources images/*
+          artifacts: # defining the artifacts to be passed to each future step.
+              - build/**
       - step:
           name: Build Docker Image & Docker Push Image
           script:
