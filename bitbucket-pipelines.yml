@@ -5,12 +5,14 @@ options:
 pipelines:
   default:
     - step:
-        name: Polymer Build 
+        name: Polymer Build
         image: sockmal/polymer-cli:1.0.0
         script:
             # build and test the Polymer app
             - npm install
             - polymer build --sources images/*
+        artifacts: # defining the artifacts to be passed to each future step.
+            - build/**
     - step:
         name: Test Build Docker Image
         script:
