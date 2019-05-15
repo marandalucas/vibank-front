@@ -14,7 +14,9 @@ $ polymer serve
 ## Building Your Application
 
 ```
-$ polymer build
+$ npm run build:dev
+
+$ npm run build:prod
 ```
 
 This will create builds of your application in the `build/` directory, optimized to be served in production. You can then serve the built versions by giving `polymer serve` a folder to serve from:
