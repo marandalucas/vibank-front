@@ -5,8 +5,8 @@ options:
 pipelines:
   default:
     - step:
-        name: NPM Build
-        image: jefferyb/polymer-cli
+        name: Polymer Build 
+        image: sockmal/polymer-cli:1.0.0
         script:
             # build and test the Polymer app
             - npm install
@@ -15,13 +15,14 @@ pipelines:
         name: Test Build Docker Image
         script:
             # build the Docker image (this will use the Dockerfile in the root of the repo)
+            - ls -la .
             - export IMAGE_NAME=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:${BITBUCKET_COMMIT}
             - docker build -t $IMAGE_NAME .
   branches:
     develop:
       - step:
-          name: NPM Build
-          image: jefferyb/polymer-cli
+          name: Polymer Build
+          image: sockmal/polymer-cli:1.0.0
           script:
             # build and test the Node app
             - npm install
@@ -41,8 +42,8 @@ pipelines:
             - docker push $IMAGE_NAME
     master:
       - step:
-          name: NPM Build
-          image: jefferyb/polymer-cli
+          name: Polymer Build
+          image: sockmal/polymer-cli:1.0.0
           script:
             # build and test the Node app
             - npm install

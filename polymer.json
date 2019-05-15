@@ -3,6 +3,10 @@
   "lint": {
     "rules": [
       "polymer-3"
+    ],
+    "sources": [
+      "src/**/*",
+      "images/**/*"
     ]
   }
 }
