@@ -5,12 +5,12 @@ options:
 pipelines:
   default:
     - step:
-        name: Polymer Build
+        name: NPM Build
         image: sockmal/polymer-cli:1.0.0
         script:
             # build and test the Polymer app
             - npm install
-            - polymer build --sources images/*
+            - npm run build:dev
         artifacts: # defining the artifacts to be passed to each future step.
             - build/**
     - step:
@@ -23,12 +23,12 @@ pipelines:
   branches:
     develop:
       - step:
-          name: Polymer Build
+          name: NPM Build
           image: sockmal/polymer-cli:1.0.0
           script:
             # build and test the Node app
             - npm install
-            - polymer build --sources images/*
+            - npm run build:dev
           artifacts: # defining the artifacts to be passed to each future step.
               - build/**
       - step:
@@ -46,12 +46,12 @@ pipelines:
             - docker push $IMAGE_NAME
     master:
       - step:
-          name: Polymer Build
+          name: NPM Build
           image: sockmal/polymer-cli:1.0.0
           script:
             # build and test the Node app
             - npm install
-            - polymer build --sources images/*
+            - npm run build:prod
           artifacts: # defining the artifacts to be passed to each future step.
               - build/**
       - step:
