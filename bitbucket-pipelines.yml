@@ -70,6 +70,10 @@ pipelines:
           name: Deploy on kubernetes
           image: sockmal/gcloud-kubectl:1.0.0
           script:
+            # Get Project Version
+            - export IMAGE_TAG="$(node -e "console.log(require('./package.json').version);")"
+            - export IMAGE_NAME=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:${IMAGE_TAG}
+
             # Prepare environment
             - export CLOUDSDK_COMPUTE_ZONE=$GCLOUD_COMPUTE_ZONE
             - export CLOUDSDK_CORE_PROJECT=$GCLOUD_CORE_PROJECT
