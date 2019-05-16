@@ -59,7 +59,7 @@ pipelines:
           script:
             # Get Project Version
             - export IMAGE_TAG="$(node -e "console.log(require('./package.json').version);")"
-            - export IMAGE_NAME=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:$IMAGE_TAG
+            - export IMAGE_NAME=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:${IMAGE_TAG}
             # build the Docker image (this will use the Dockerfile in the root of the repo)
             - docker build -t $IMAGE_NAME .
             # authenticate with the Docker Hub registry
@@ -85,4 +85,4 @@ pipelines:
             - kubectl cluster-info
 
             # Update the deployment to use the new Docker image
-            - kubectl set image deployment/${DOCKER_IMAGE_FRONT_NAME} ${DOCKER_IMAGE_FRONT_NAME}=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:$IMAGE_TAG
+            - kubectl set image deployment/${DOCKER_IMAGE_FRONT_NAME} ${DOCKER_IMAGE_FRONT_NAME}=${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_FRONT_NAME}:${IMAGE_TAG}
