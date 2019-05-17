@@ -1,6 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
 import '@polymer/app-route/app-location.js';
 
 /**
@@ -14,9 +15,31 @@ class VisorMovimientos extends PolymerElement {
 
       <style>
 
+          .flex-parent{
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+          }
+
+          .flex-child{
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+          }
+
           .bluecell {
               background-color: #015C80;
               color: white;
+              border: white 1px solid;
+              border-radius: 4px;
+          }
+          .greycell{
+              background-color: #E4E4E4;
+              border: white 1px solid;
+              border-radius: 4px;
+              align-items: center;
           }
 
       </style>
@@ -25,63 +48,72 @@ class VisorMovimientos extends PolymerElement {
 
       <app-location route="{{route}}"></app-location>
 
-      <br><br><br><br>
+      <br><br>
 
       <div class="row">
           <div class="col-md-10">
-              <div class="row">
+              <div class="row flex-parent">
                   <div class="col-md-3"></div>
-                  <div class="col-md-4"><h5>&nbsp;&nbsp;&nbsp; Movimientos de cuenta</h5></div>
+                  <div class="col-md-8 bluecell flex-child"><h5>&nbsp;&nbsp;&nbsp; Detalle de Movimientos</h5></div>
               </div>
               <div class="row">
                   <div class="col-md-3"></div>
                   <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; Tipo operación</div>
-                  <div class="col-md-1 bluecell">Importe</div>
-                  <div class="col-md-1 bluecell">Saldo</div>
+                  <div class="col-md-2 bluecell" align="right">Importe</div>
+                  <div class="col-md-2 bluecell" align="right">Saldo</div>
               </div>
-              <br>
+
               <template is="dom-repeat" items="[[operations]]">
-                  <div class="row">
+                  <div class="row flex-parent">
                       <div class="col-md-3"></div>
-                      <div class="col-md-4">
+                      <div class="col-md-4 greycell">
                           <button class="btn" on-click="consultaMovimiento" id="[[item.idOper]]">
                             <img src="../../images/icon-lupa.png" alt="Consulta movimiento" width="20" height="20" id="[[item.idOper]]"/>
                           </button>
                           [[item.descOperType]]
                       </div>
-                      <div class="col-md-1">[[item.sign]][[item.amount]]</div>
-                      <div class="col-md-1">[[item.balance]]</div>
+                      <div class="col-md-2 greycell flex-child" align="right">[[item.sign]][[item.amount]] €</div>
+                      <div class="col-md-2 greycell flex-child" align="right">[[item.balance]] €</div>
                   </div>
               </template>
           </div>
 
+
           <div class="col-md-2">
-              <h5>Operaciones</h5>
+              <div class="row"><h5>&nbsp;Operaciones</h5></div>
               <div class="row">
-                  <button on-click="realizarOperacion" id="btn-ingreso" heigh="5" class="btn btn-info">Ingreso</button>
+                  <button on-click="realizarOperacion" id="btn-ingreso" class="btn btn-info btn-sm">Ingreso</button>
               </div>
               <br>
               <div class="row">
-                  <button on-click="realizarOperacion" id="btn-reintegro" heigh="10" class="btn btn-info">Reintegro</button>
+                  <button on-click="realizarOperacion" id="btn-reintegro" class="btn btn-info btn-sm">Reintegro</button>
               </div>
               <br>
               <div class="row">
-                  <button on-click="realizarOperacion" id="btn-transferencia" heigh="10" class="btn btn-info">Transferencia</button>
+                  <button on-click="realizarOperacion" id="btn-transferencia" class="btn btn-info btn-sm">Traspaso entre mis cuentas</button>
+              </div>
+              <br>
+              <div class="row">
+                  <button on-click="exitOper" class="btn btn-info">Volver</button>
               </div>
           </div>
       </div>
 
       <br>
 
-      <iron-ajax
-        auto
-        id="getOpers"
-        url="http://localhost:3000/vibank/v1/accountopers/{{idAccount}}"
-        handle-as="json"
-        on-response="showDataOpers"
-        on-error="showError"
-      >
-      </iron-ajax>
+
+      <template is="dom-if" if="[[doRefresh]]" restamp="true">
+          <iron-ajax
+            auto
+            id="getOpers"
+            url="http://localhost:3000/vibank/v1/accountopers/{{idAccount}}"
+            handle-as="json"
+            on-response="showDataOpers"
+            on-error="showError"
+          >
+          </iron-ajax>
+
+      </template>
 
     `;
   }
@@ -97,6 +129,10 @@ class VisorMovimientos extends PolymerElement {
       },
       route: {
         type: Object
+      },
+      doRefresh: {
+        type: Boolean,
+        value: false
       }
     };
   } // End properties
@@ -111,6 +147,7 @@ class VisorMovimientos extends PolymerElement {
     console.log("Hubo un error");
     console.log(error);
     console.log(error.detail.request.xhr.response);
+    this.operations = [];
   }
 
   realizarOperacion(e) {
@@ -121,6 +158,8 @@ class VisorMovimientos extends PolymerElement {
           var operType = 2;
       } else if (e.srcElement.id == "btn-transferencia"){
           var operType = 3;
+      } else if (e.srcElement.id == "btn-traspaso"){
+          var operType = 4;
       }
 
       this.set('route.path', '/visor-operaciones');
@@ -141,20 +180,36 @@ class VisorMovimientos extends PolymerElement {
 
   consultaMovimiento(e) {
 
-      console.log("Botón consulta movimiento pulsado");
+      this.set('route.path', '/visor-movimiento');
 
       this.dispatchEvent(
           new CustomEvent(
               "myevent",
               {
                   "detail" : {
-                      "idOper":e.srcElement.id
+                      "idOper": e.srcElement.id,
+                      "idAccount": this.idAccount
                   }
               }
           )
       )
 
-      this.set('route.path', '/visor-movimiento');
+  }
+
+  exitOper(e) {
+
+      this.set('route.path', '/visor-cuentas');
+
+      this.dispatchEvent(
+          new CustomEvent(
+                "myevent",
+                {
+                    "detail" : {
+                    }
+                }
+            )
+        )
+
   }
 
 

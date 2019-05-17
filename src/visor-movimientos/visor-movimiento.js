@@ -36,6 +36,14 @@ class VisorMovimiento extends PolymerElement {
         </div>
     </span>
 
+    <span hidden$="[[!isTraspas]]">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-2" align="left"><h5>Concepto</h5></div>
+            <div class="col-md-6" align="rigth"><h5>[[concept]]</h5></div>
+        </div>
+    </span>
+
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-2" align="left"><h5>Importe</h5></div>
@@ -73,12 +81,17 @@ static get properties() {
       type: String
     },
     idOper: {
-      type: Number
+      type: Number,
+      value: 0
     },
     route: {
         type: Object
     },
     isTransfer:{
+      type: Boolean,
+      value:false
+    },
+    isTraspas:{
       type: Boolean,
       value:false
     }
@@ -93,8 +106,12 @@ showDataOper(data) {
   this.amount = data.detail.response.amount;
   this.sign = data.detail.response.sign;
 
-  if (data.detail.response.operType == 3 || data.detail.response.operType == 4) {
+  if (data.detail.response.operType == 3){
       this.isTransfer = true;
+  }
+
+  if (data.detail.response.operType == 4){
+      this.isTraspas = true;
   }
 }
 

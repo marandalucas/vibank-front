@@ -81,18 +81,14 @@ class visorLogin extends PolymerElement {
       this.password = "";
       this.email = "";
 
-      // this.set('route.path', '/visor-cuentas');
-      this.set('route.path', '/visor-movimientos');
+      this.set('route.path', '/visor-cuentas');
 
       this.dispatchEvent(
         new CustomEvent(
           "myevent",
           {
             "detail" : {
-              // "userid" : data.detail.response.UserID
-              "idUser":this.idUser,
-              "idAccount": 1,
-              "isLogged": true
+              "idUser":this.idUser
             }
           }
         )
