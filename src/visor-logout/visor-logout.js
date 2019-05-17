@@ -85,8 +85,7 @@ class visorLogout extends PolymerElement {
 
   cancelLogout() {
 
-    this.set('route.path', '/visor-movimientos');
-    // this.set('route.path', '/visor-cuentas');
+    this.set('route.path', '/visor-cuentas');
 
   }
 

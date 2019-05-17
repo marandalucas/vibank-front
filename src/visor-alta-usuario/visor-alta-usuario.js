@@ -111,22 +111,19 @@ class visorAltaUsuario extends PolymerElement {
 
   exitSignUp(e) {
 
-    console.log("hago exitSignUp");
+    this.set('route.path', '/visor-cuentas');
+
       this.dispatchEvent(
           new CustomEvent(
                 "myevent",
                 {
                     "detail" : {
-                        "idUser":this.idUser,
-                        "idAccount": 1,
-                        "isLogged": true
+                        "idUser":this.idUser
                     }
                 }
             )
         )
-          // this.set('route.path', '/visor-cuentas');
-          
-        this.set('route.path', '/visor-movimientos');
+
   }
 
 } // End Class

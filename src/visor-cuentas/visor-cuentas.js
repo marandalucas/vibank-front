@@ -1,6 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
 import '@polymer/app-route/app-location.js';
 
 /**
@@ -8,7 +9,7 @@ import '@polymer/app-route/app-location.js';
  * @polymer
  */
 
-class visorCuentasUsuario extends PolymerElement {
+class visorCuentas extends PolymerElement {
   static get template() {
     return html`
 
@@ -39,8 +40,8 @@ class visorCuentasUsuario extends PolymerElement {
                   <div class="row">
                       <div class="col-md-3"></div>
                       <div class="col-md-1">
-                          <button class="btn" on-click="consultaMovimientosCuenta" id="[[item.id]]">
-                            <img src="../../images/icon-lupa.png" alt="Consulta Movimiento Cuentas" width="20" height="20" id="[[item.id]]"/>
+                          <button class="btn" on-click="consultaMovimientos" id="[[item.idAccount]]">
+                            <img src="../../images/icon-lupa.png" alt="Consulta Movimiento Cuentas" width="20" height="20" id="[[item.idAccount]]"/>
                           </button>
                       </div>
                       <div class="col-md-4">[[item.IBAN]]</div>
@@ -60,41 +61,40 @@ class visorCuentasUsuario extends PolymerElement {
 
       <br>
 
-      <iron-ajax
-        auto
-        id="getUserAccounts"
-        url="http://localhost:3000/vibank/v1/accounts/{{userID}}"
-        handle-as="json"
-        on-response="showDataUserAccounts"
-        on-error="showError"
-      >
-      </iron-ajax>
-
+      <template is="dom-if" if="[[doRefresh]]" restamp="true">
+          <iron-ajax
+            auto
+            id="getUserAccounts"
+            url="http://localhost:3000/vibank/v1/accounts/{{idUser}}"
+            handle-as="json"
+            on-response="showDataUserAccounts"
+            on-error="showError"
+          >
+          </iron-ajax>
+      </template>
     `;
   }
 
   static get properties() {
     return {
-      userID: {
+      idUser: {
         type: Number,
-        value:1
+        value: 0
       },
       userAccounts: {
         type: Array
       },
-      id: {
-        type: Number
-      },
       route: {
         type: Object
+      },
+      doRefresh: {
+        type: Boolean,
+        value: false
       }
     };
   } // End properties
 
   showDataUserAccounts(data) {
-
-    console.log("showDataUserAccounts");
-    console.log(data.detail.response);
 
     this.userAccounts = data.detail.response;
 
@@ -104,12 +104,11 @@ class visorCuentasUsuario extends PolymerElement {
     console.log("Hubo un error");
     console.log(error);
     console.log(error.detail.request.xhr.response);
+
+    this.userAccounts = [];
   }
 
-  consultaMovimientosCuenta(e) {
-
-    console.log("Botón consulta movimiento pulsado");
-    console.log(e.srcElement.id);
+  consultaMovimientos(e) {
 
     this.set('route.path', '/visor-movimientos');
 
@@ -118,7 +117,7 @@ class visorCuentasUsuario extends PolymerElement {
             "myevent",
             {
                 "detail" : {
-                    "id":e.srcElement.id
+                    "idAccount": e.srcElement.id
                 }
             }
         )
@@ -127,9 +126,6 @@ class visorCuentasUsuario extends PolymerElement {
 
 newAccount(e) {
 
-  console.log("Botón Nueva cuenta pulsado");
-
-
   this.set('route.path', '/visor-alta-cuenta');
 
   this.dispatchEvent(
@@ -137,7 +133,7 @@ newAccount(e) {
           "myevent",
           {
               "detail" : {
-                  "userID":this.userID
+                  "idUser":this.idUser
               }
           }
       )
@@ -146,4 +142,4 @@ newAccount(e) {
 
 } // End class
 
-window.customElements.define('visor-cuentas-usuario', visorCuentasUsuario);
+window.customElements.define('visor-cuentas', visorCuentas);
