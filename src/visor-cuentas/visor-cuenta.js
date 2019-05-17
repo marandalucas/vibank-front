@@ -1,5 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
 
 /**
  * @customElement
@@ -20,14 +21,16 @@ class VisorCuenta extends PolymerElement {
           <div class="col-md-1" align="left"><h5>[[balance]] €</h5></div>
       </div>
 
-      <iron-ajax
-        auto
-        id="getAccount"
-        url="http://localhost:3000/vibank/v1/account/{{idAccount}}"
-        handle-as="json"
-        on-response="showDataAccount"
-      >
-      </iron-ajax>
+      <template is="dom-if" if="[[doRefresh]]" restamp="true">
+          <iron-ajax
+            auto
+            id="getAccount"
+            url="http://localhost:3000/vibank/v1/account/{{idAccount}}"
+            handle-as="json"
+            on-response="showDataAccount"
+          >
+          </iron-ajax>
+      </template>
   `;
   }
   static get properties() {
@@ -37,10 +40,14 @@ class VisorCuenta extends PolymerElement {
       },
       idAccount: {
         type: Number,
-        value: 1
+        value: 0
       },
       balance: {
         type: Number
+      },
+      doRefresh: {
+        type: Boolean,
+        value: false
       }
     };
   } // End properties
