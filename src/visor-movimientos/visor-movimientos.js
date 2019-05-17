@@ -90,7 +90,10 @@ class VisorMovimientos extends PolymerElement {
               </div>
               <br>
               <div class="row">
-                  <button on-click="realizarOperacion" id="btn-transferencia" class="btn btn-info btn-sm">Traspaso entre mis cuentas</button>
+                  <button on-click="realizarOperacion" id="btn-transferencia" class="btn btn-info btn-sm">Transferencia</button>
+              </div>
+              <div class="row">
+                  <button on-click="realizarOperacion" id="btn-traspaso" class="btn btn-info btn-sm">Traspaso</button>
               </div>
               <br>
               <div class="row">
