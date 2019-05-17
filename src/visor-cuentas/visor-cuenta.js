@@ -18,7 +18,7 @@ class VisorCuenta extends PolymerElement {
           <div class="col-md-1" align="right"><h5>IBAN</h5></div>
           <div class="col-md-4" align="left"><h5>[[IBAN]]</h5></div>
           <div class="col-md-1" align="right"><h5>Saldo</h5></div>
-          <div class="col-md-1" align="left"><h5>[[balance]] €</h5></div>
+          <div class="col-md-2" align="left"><h5>[[balance]] €</h5></div>
       </div>
 
       <template is="dom-if" if="[[doRefresh]]" restamp="true">
