@@ -141,7 +141,6 @@ class FrontvibankApp extends PolymerElement {
 
     console.log("Capturado evento del emisor");
     console.log(e);
-    console.log("mi ruta es: "+ this.routeData.resource);
 
     if (this.routeData.resource == "visor-login") {
         this.isLogged = false;
@@ -168,6 +167,8 @@ class FrontvibankApp extends PolymerElement {
         this.$.visorMovimientos.idAccount = e.detail.idAccount;
         this.$.visorCuenta.doRefresh = true;
         this.$.visorCuentas.doRefresh = false;
+        this.$.visorOperaciones.doRefresh = false;
+        this.$.visorMovimiento.doRefresh = false;
         this.$.visorMovimientos.doRefresh = true;
         this.isViewAccount = true;
     }
@@ -176,6 +177,7 @@ class FrontvibankApp extends PolymerElement {
         this.$.visorCuenta.idAccount = e.detail.idAccount;
         this.$.visorMovimiento.idOper = e.detail.idOper;
         this.$.visorCuenta.doRefresh = true;
+        this.$.visorMovimiento.doRefresh = true;
         this.isViewAccount = true;
     }
 
@@ -209,6 +211,7 @@ class FrontvibankApp extends PolymerElement {
         this.isViewAccount = false;
         this.$.visorCuenta.doRefresh = false;
         this.$.visorMovimientos.doRefresh = false;
+        this.$.visorOperaciones.doRefresh = true;
     }
 
   }
