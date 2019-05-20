@@ -51,7 +51,6 @@ class visorAltaUsuario extends PolymerElement {
         <button on-click="exitSignUp" class="btn btn-info">Continuar</button>
       </span>
 
-
       <iron-ajax
         id="doSingUP"
         url="http://localhost:3000/vibank/v1/user/"
@@ -84,6 +83,39 @@ class visorAltaUsuario extends PolymerElement {
 
   login() {
 
+
+    //validations
+
+    if (this.firstname === undefined || this.firstname == ""){
+       alert("Nombre no informado");
+       return;
+    }
+
+    if (this.lastname === undefined || this.lastname == ""){
+       alert("Apellidos no informados");
+       return;
+    }
+
+    if (this.email === undefined || this.email == ""){
+       alert("Email no informado");
+       return;
+    }
+
+    if (this.password === undefined || this.password == ""){
+       alert("Contraseña no informada");
+       return;
+    }
+
+    var test = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var emailReg = new RegExp(test);
+
+    if (!emailReg.test(this.email)){
+        alert("Formato de email incorrecto");
+        return;
+    }
+
+    //end validations
+
     var singUpData = {
       "first_name": this.firstname,
       "last_name": this.lastname,
@@ -98,6 +130,7 @@ class visorAltaUsuario extends PolymerElement {
 
   manageAJAXResponse(data) {
 
+      localStorage.setItem("token", "Bearer " + data.detail.response.token);
       this.isSignUp = true;
       this.idUser = data.detail.response.idUser;
 

@@ -9,12 +9,12 @@ import '@polymer/app-route/app-location.js';
 class visorAltaCuenta extends PolymerElement {
   static get template() {
     return html`
+
       <style>
         :host {
           display: block;
         }
       </style>
-
 
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -37,7 +37,11 @@ class visorAltaCuenta extends PolymerElement {
               <div class="col-md-12" align="center"><h5>Su cuenta ha sido dada de alta con éxito!</h5></div>
           </div>
           <br>
-
+          <div class="row">
+              <div class="col-md-12" align="center"><h5>IBAN [[IBAN]]</h5></div>
+          </div>
+          <br>
+          <br>
           <div class="row">
               <div class="col-md-12" align="center"><button on-click="exitOper" class="btn btn-info">Continuar</button></div>
           </div>
@@ -48,6 +52,7 @@ class visorAltaCuenta extends PolymerElement {
         url="http://localhost:3000/vibank/v1/account"
         content-type="application/json"
         method="POST"
+        headers={{headers}}
         on-response="manageAJAXResponse"
         on-error="showError"
       >
@@ -62,11 +67,20 @@ class visorAltaCuenta extends PolymerElement {
       }, balance: {
         type: Number,
         value: 0
+      }, IBAN: {
+        type: String
       }, isDoOper: {
         type: Boolean,
         value: false
       }, route: {
         type: Object,
+      },headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End Properties+
@@ -83,16 +97,15 @@ class visorAltaCuenta extends PolymerElement {
 
   }
 
-  // vienen del on-response y error
   manageAJAXResponse(data) {
 
+      this.IBAN = data.detail.response.IBAN;
       this.isDoOper = true;
   }
 
   showError(error){
-    console.log("hubo un error");
-    console.log(error);
-    console.log(error.detail.request.xhr.response);
+    alert("Hubo un error en la creación de la cuenta");
+    this.set('route.path', '/visor-cuentas');
   }
 
   exitOper(e) {

@@ -15,7 +15,7 @@ class VisorCuenta extends PolymerElement {
 
       <div class="row">
           <div class="col-md-2"></div>
-          <div class="col-md-1" align="right"><h5>IBAN</h5></div>
+          <div class="col-md-1" align="right"><h5>&nbsp;&nbsp;&nbsp;&nbsp;IBAN</h5></div>
           <div class="col-md-4" align="left"><h5>[[IBAN]]</h5></div>
           <div class="col-md-1" align="right"><h5>Saldo</h5></div>
           <div class="col-md-2" align="left"><h5>[[balance]] €</h5></div>
@@ -27,6 +27,7 @@ class VisorCuenta extends PolymerElement {
             id="getAccount"
             url="http://localhost:3000/vibank/v1/account/{{idAccount}}"
             handle-as="json"
+            headers={{headers}}
             on-response="showDataAccount"
           >
           </iron-ajax>
@@ -48,6 +49,14 @@ class VisorCuenta extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End properties
@@ -56,6 +65,8 @@ class VisorCuenta extends PolymerElement {
 
     this.IBAN = data.detail.response.IBAN;
     this.balance = data.detail.response.balance;
+
+    this.balance = new Intl.NumberFormat("de-DE").format(this.balance);
 
   }
 

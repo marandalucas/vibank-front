@@ -35,11 +35,28 @@ class VisorMovimientos extends PolymerElement {
               border: white 1px solid;
               border-radius: 4px;
           }
+
           .greycell{
               background-color: #E4E4E4;
               border: white 1px solid;
               border-radius: 4px;
+          }
+
+          .optionsbutton{
+              background-color: #015C80;
+              border: white 1px solid;
+              border-radius: 4px;
               align-items: center;
+              color: white;
+              width: 100px;
+          }
+
+          .lineaAzul{
+              background-color: #015C80;
+              border-radius: 4px;
+              margin-bottom: 2px;
+              width: 100px;
+              height: 2px;
           }
 
       </style>
@@ -54,22 +71,22 @@ class VisorMovimientos extends PolymerElement {
           <div class="col-md-10">
               <div class="row flex-parent">
                   <div class="col-md-3"></div>
-                  <div class="col-md-8 bluecell flex-child"><h5>&nbsp;&nbsp;&nbsp; Detalle de Movimientos</h5></div>
+                  <div class="col-md-8 bluecell flex-child"><h5>&nbsp;&nbsp;&nbsp; <strong>Detalle de Movimientos</strong></h5></div>
               </div>
               <div class="row">
                   <div class="col-md-3"></div>
-                  <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; Tipo operación</div>
-                  <div class="col-md-2 bluecell" align="right">Importe</div>
-                  <div class="col-md-2 bluecell" align="right">Saldo</div>
+                  <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; <strong>Operación</strong></div>
+                  <div class="col-md-2 bluecell" align="right"><strong>Importe</strong></div>
+                  <div class="col-md-2 bluecell" align="right"><strong>Saldo</strong></div>
               </div>
 
               <template is="dom-repeat" items="[[operations]]">
                   <div class="row flex-parent">
                       <div class="col-md-3"></div>
                       <div class="col-md-4 greycell">
-                          <button class="btn" on-click="consultaMovimiento" id="[[item.idOper]]">
-                            <img src="../../images/icon-lupa.png" alt="Consulta movimiento" width="20" height="20" id="[[item.idOper]]"/>
-                          </button>
+                          <a href="#" class="btn tooltip-test" title="Consulta Movimiento" on-click="consultaMovimiento" id="[[item.idOper]]">
+                            <img src="../../images/icon-lupa.png" width="20" height="20" id="[[item.idOper]]"/>
+                          </a>
                           [[item.descOperType]]
                       </div>
                       <div class="col-md-2 greycell flex-child" align="right">[[item.sign]][[item.amount]] €</div>
@@ -79,31 +96,18 @@ class VisorMovimientos extends PolymerElement {
           </div>
 
 
-          <div class="col-md-2">
-              <div class="row"><h5>&nbsp;Operaciones</h5></div>
-              <div class="row">
-                  <button on-click="realizarOperacion" id="btn-ingreso" class="btn btn-info btn-sm">Ingreso</button>
-              </div>
-              <br>
-              <div class="row">
-                  <button on-click="realizarOperacion" id="btn-reintegro" class="btn btn-info btn-sm">Reintegro</button>
-              </div>
-              <br>
-              <div class="row">
-                  <button on-click="realizarOperacion" id="btn-transferencia" class="btn btn-info btn-sm">Transferencia</button>
-              </div>
-              <div class="row">
-                  <button on-click="realizarOperacion" id="btn-traspaso" class="btn btn-info btn-sm">Traspaso</button>
-              </div>
-              <br>
-              <div class="row">
-                  <button on-click="exitOper" class="btn btn-info">Volver</button>
-              </div>
+          <div class="col-md-1">
+              <div align="center"><h5>Operaciones</h5></div>
+              <div class="lineaAzul"></div>
+              <button on-click="realizarOperacion" id="btn-ingreso" class="optionsbutton">Ingreso</button>
+              <button on-click="realizarOperacion" id="btn-reintegro" class="optionsbutton">Reintegro</button>
+              <button on-click="realizarOperacion" id="btn-transferencia" class="optionsbutton">Transferencia</button>
+              <button on-click="realizarOperacion" id="btn-traspaso" class="optionsbutton">Traspaso</button>
+
+              <br><br><br><br>
+              <button on-click="exitOper" class="btn btn-info">Volver</button>
           </div>
       </div>
-
-      <br>
-
 
       <template is="dom-if" if="[[doRefresh]]" restamp="true">
           <iron-ajax
@@ -111,6 +115,7 @@ class VisorMovimientos extends PolymerElement {
             id="getOpers"
             url="http://localhost:3000/vibank/v1/accountopers/{{idAccount}}"
             handle-as="json"
+            headers={{headers}}
             on-response="showDataOpers"
             on-error="showError"
           >
@@ -136,6 +141,14 @@ class VisorMovimientos extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End properties
@@ -143,6 +156,14 @@ class VisorMovimientos extends PolymerElement {
   showDataOpers(data) {
 
     this.operations = data.detail.response;
+
+    for(var i=0; i<this.operations.length; i++) {
+        this.operations[i].balance = new Intl.NumberFormat("de-DE").format(this.operations[i].balance);
+    }
+
+    for(var i=0; i<this.operations.length; i++) {
+        this.operations[i].amount = new Intl.NumberFormat("de-DE").format(this.operations[i].amount);
+    }
 
   }
 

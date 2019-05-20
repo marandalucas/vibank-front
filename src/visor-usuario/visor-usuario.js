@@ -11,6 +11,8 @@ class VisorUsuario extends PolymerElement {
   static get template() {
   return html`
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <div align="right">[[first_name]] [[last_name]]</div>
 
     <template is="dom-if" if="[[doRefresh]]" restamp="true">
@@ -19,6 +21,7 @@ class VisorUsuario extends PolymerElement {
           id="getUser"
           url="http://localhost:3000/vibank/v1/user/{{idUser}}"
           handle-as="json"
+          headers={{headers}}
           on-response="showDataUser"
         >
         </iron-ajax>
@@ -39,6 +42,13 @@ static get properties() {
     },doRefresh: {
       type: Boolean,
       value: false
+    },headers: {
+      type: Object,
+      value: { authorization: {
+                type: String
+              }
+
+            }
     }
   };
 } // End properties

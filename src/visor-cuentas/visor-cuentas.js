@@ -15,9 +15,49 @@ class visorCuentas extends PolymerElement {
 
       <style>
 
+          .flex-parent{
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+          }
+
+          .flex-child{
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+          }
+
           .bluecell {
               background-color: #015C80;
               color: white;
+              border: white 1px solid;
+              border-radius: 4px;
+          }
+
+          .greycell{
+              background-color: #E4E4E4;
+              border: white 1px solid;
+              border-radius: 4px;
+              align-items: center;
+          }
+
+          .optionsbutton{
+              background-color: #015C80;
+              border: white 1px solid;
+              border-radius: 4px;
+              align-items: center;
+              color: white;
+              width: 100px;
+          }
+
+          .lineaAzul{
+              background-color: #015C80;
+              border-radius: 4px;
+              margin-bottom: 2px;
+              width: 100px;
+              height: 2px;
           }
 
       </style>
@@ -26,37 +66,39 @@ class visorCuentas extends PolymerElement {
 
       <app-location route="{{route}}"></app-location>
 
-      <br><br><br><br>
+      <br>
 
       <div class="row">
           <div class="col-md-10">
+              <div class="row flex-parent">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-8 bluecell flex-child"><h5><strong>&nbsp;&nbsp;&nbsp;Posición de cuentas</strong></h5></div>
+              </div>
               <div class="row">
                   <div class="col-md-3"></div>
-                  <div class="col-md-4 bluecell">&nbsp;&nbsp;&nbsp; IBAN</div>
-                  <div class="col-md-3 bluecell">Balance</div>
+                  <div class="col-md-5 bluecell"><strong>&nbsp;&nbsp;&nbsp;IBAN</strong></div>
+                  <div class="col-md-3 bluecell" align="right"><strong>Balance</strong></div>
               </div>
-              <br>
               <template is="dom-repeat" items="[[userAccounts]]">
-                  <div class="row">
+                  <div class="row flex-parent">
                       <div class="col-md-3"></div>
-                      <div class="col-md-1">
-                          <button class="btn" on-click="consultaMovimientos" id="[[item.idAccount]]">
-                            <img src="../../images/icon-lupa.png" alt="Consulta Movimiento Cuentas" width="20" height="20" id="[[item.idAccount]]"/>
-                          </button>
+                      <div class="col-md-5 greycell">
+                          <a href="#" class="btn tooltip-test" title="Consulta Cuenta" on-click="consultaMovimientos" id="[[item.idAccount]]">
+                            <img src="../../images/icon-lupa.png" alt="Consulta Cuenta" width="20" height="20" id="[[item.idAccount]]"/>
+                          </a>
+                          [[item.IBAN]]
                       </div>
-                      <div class="col-md-4">[[item.IBAN]]</div>
-                      <div class="col-md-1">[[item.balance]]</div>
-
+                      <div class="col-md-3 greycell flex-child" align="right">[[item.balance]] €</div>
                   </div>
               </template>
           </div>
 
-          <div class="col-md-2">
-              <div class="row">
-                  <button on-click="newAccount" id="btn-newaccount" heigh="5" class="btn btn-info">Nueva Cuenta</button>
-              </div>
-              <br>
+          <div class="col-md-1">
+              <div align="center"><h5>Operaciones</h5></div>
+              <div class="lineaAzul"></div>
+              <button on-click="newAccount" id="btn-newaccount" class="optionsbutton">Alta Cuenta</button>
           </div>
+
       </div>
 
       <br>
@@ -67,6 +109,7 @@ class visorCuentas extends PolymerElement {
             id="getUserAccounts"
             url="http://localhost:3000/vibank/v1/accounts/{{idUser}}"
             handle-as="json"
+            headers={{headers}}
             on-response="showDataUserAccounts"
             on-error="showError"
           >
@@ -90,13 +133,26 @@ class visorCuentas extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
+
     };
   } // End properties
 
   showDataUserAccounts(data) {
 
     this.userAccounts = data.detail.response;
+
+    for(var i=0; i<this.userAccounts.length; i++) {
+        this.userAccounts[i].balance = new Intl.NumberFormat("de-DE").format(this.userAccounts[i].balance);
+    }
 
   }
 
