@@ -6,7 +6,7 @@
     "build:dev": "polymer build --env dev --sources images/*",
     "postbuild:dev": "",
     "build:prod": "polymer build --env prod --sources images/*",
-    "postbuild:prod": "find ./build/ -type f -print0 | xargs -0 sed -i 's/localhost:3000/35.189.200.249:8080/g'"
+    "postbuild:prod": ""
   },
   "dependencies": {
     "@polymer/app-route": "^3.0.2",
