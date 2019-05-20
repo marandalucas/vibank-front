@@ -1,6 +1,6 @@
 {
   "name": "vibank-front",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Proyecto Vibank",
   "scripts": {
     "build:dev": "polymer build --env dev --sources images/*",

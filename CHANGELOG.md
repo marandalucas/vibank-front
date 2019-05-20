@@ -6,7 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2019-xx-xx
+## [1.1.0] - 2019-05-21
+### Added
+- __Autenticación JWT__.
+
+### Removed
+- Nothing.
+
+### Fixed
+- __Validaciones JS Inputs__.
+
+## [1.0.0] - 2019-05-14
 ### Added
 - __Visor Alta Usuario__.
 - __Visor Cuentas__.
