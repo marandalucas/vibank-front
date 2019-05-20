@@ -13,6 +13,7 @@ import '../visor-cuentas/visor-cuenta.js'
 import '../visor-cuentas/visor-cuentas.js'
 import '../visor-alta-usuario/visor-alta-usuario.js'
 import '../visor-alta-cuenta/visor-alta-cuenta.js'
+import '../visor-moneda/visor-moneda.js'
 
 /**
  * @customElement
@@ -94,6 +95,7 @@ class FrontvibankApp extends PolymerElement {
           </div>
 
           <div component-name="visor-cuentas">
+              <visor-moneda id="visorMoneda"></visor-moneda>
               <visor-cuentas on-myevent="processEvent" id="visorCuentas"></visor-cuentas>
           </div>
 
@@ -142,10 +144,13 @@ class FrontvibankApp extends PolymerElement {
     console.log("Capturado evento del emisor");
     console.log(e);
 
+
+
     if (this.routeData.resource == "visor-login") {
         this.isLogged = false;
-        this.isEnterLogin = true;
+        this.$.visorUsuario.doRefresh = false;
         this.isViewAccount = false;
+        this.isEnterLogin = true;
     }
 
     if (this.routeData.resource == "visor-cuentas") {
@@ -153,27 +158,35 @@ class FrontvibankApp extends PolymerElement {
         if (!this.isLogged) {
              this.isLogged = true;
              this.idUser = e.detail.idUser;
+             this.$.visorUsuario.headers['authorization'] = localStorage.getItem("token");
              this.$.visorUsuario.idUser = e.detail.idUser;
              this.$.visorUsuario.doRefresh = true;
         }
 
+        this.$.visorCuentas.headers['authorization'] = localStorage.getItem("token");
         this.$.visorCuentas.idUser = this.idUser;
         this.$.visorCuentas.doRefresh = true;
         this.isViewAccount = false;
     }
 
     if (this.routeData.resource == "visor-movimientos") {
-        this.$.visorCuenta.idAccount = e.detail.idAccount;
-        this.$.visorMovimientos.idAccount = e.detail.idAccount;
-        this.$.visorCuenta.doRefresh = true;
+
         this.$.visorCuentas.doRefresh = false;
         this.$.visorOperaciones.doRefresh = false;
         this.$.visorMovimiento.doRefresh = false;
+
+        this.$.visorCuenta.headers['authorization'] = localStorage.getItem("token");
+        this.$.visorMovimientos.headers['authorization'] = localStorage.getItem("token");
+        this.$.visorCuenta.idAccount = e.detail.idAccount;
+        this.$.visorMovimientos.idAccount = e.detail.idAccount;
+        this.$.visorCuenta.doRefresh = true;
         this.$.visorMovimientos.doRefresh = true;
         this.isViewAccount = true;
     }
 
     if (this.routeData.resource == "visor-movimiento") {
+        this.$.visorCuenta.headers['authorization'] = localStorage.getItem("token");
+        this.$.visorMovimiento.headers['authorization'] = localStorage.getItem("token");
         this.$.visorCuenta.idAccount = e.detail.idAccount;
         this.$.visorMovimiento.idOper = e.detail.idOper;
         this.$.visorCuenta.doRefresh = true;
@@ -182,6 +195,7 @@ class FrontvibankApp extends PolymerElement {
     }
 
     if (this.routeData.resource == "visor-alta-cuenta") {
+        this.$.visorAltaCuenta.headers['authorization'] = localStorage.getItem("token");
         this.$.visorAltaCuenta.idUser = e.detail.idUser;
         this.$.visorCuentas.doRefresh = false;
         this.isViewAccount = false;
@@ -211,6 +225,8 @@ class FrontvibankApp extends PolymerElement {
         this.isViewAccount = false;
         this.$.visorCuenta.doRefresh = false;
         this.$.visorMovimientos.doRefresh = false;
+
+        this.$.visorOperaciones.headers['authorization'] = localStorage.getItem("token");
         this.$.visorOperaciones.doRefresh = true;
     }
 
@@ -223,6 +239,7 @@ class FrontvibankApp extends PolymerElement {
 
   doLogout() {
       this.set('route.path', '/visor-logout');
+      this.$.visorLogout.headers['authorization'] = localStorage.getItem("token");
       this.$.visorLogout.idUser = this.idUser;
       this.isViewAccount = false;
   }

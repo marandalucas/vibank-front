@@ -21,6 +21,7 @@ class VisorUsuario extends PolymerElement {
           id="getUser"
           url="http://localhost:3000/vibank/v1/user/{{idUser}}"
           handle-as="json"
+          headers={{headers}}
           on-response="showDataUser"
         >
         </iron-ajax>
@@ -41,6 +42,13 @@ static get properties() {
     },doRefresh: {
       type: Boolean,
       value: false
+    },headers: {
+      type: Object,
+      value: { authorization: {
+                type: String
+              }
+
+            }
     }
   };
 } // End properties

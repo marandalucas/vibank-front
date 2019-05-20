@@ -98,6 +98,8 @@ class visorLogin extends PolymerElement {
 
   manageAJAXResponse(data) {
 
+      localStorage.setItem("token", "Bearer " + data.detail.response.token);
+
       this.idUser = data.detail.response.UserID
       this.password = "";
       this.email = "";
@@ -117,9 +119,11 @@ class visorLogin extends PolymerElement {
   }
 
   showError(error){
-    console.log("hubo un error");
-    console.log(error);
-    console.log(error.detail.request.xhr.response);
+
+    this.email = "";
+    this.password = "";
+    alert("Login incorrecto");
+
   }
 
   goNewUser() {

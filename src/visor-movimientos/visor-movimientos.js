@@ -115,6 +115,7 @@ class VisorMovimientos extends PolymerElement {
             id="getOpers"
             url="http://localhost:3000/vibank/v1/accountopers/{{idAccount}}"
             handle-as="json"
+            headers={{headers}}
             on-response="showDataOpers"
             on-error="showError"
           >
@@ -140,6 +141,14 @@ class VisorMovimientos extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End properties

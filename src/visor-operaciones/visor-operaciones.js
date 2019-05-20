@@ -106,11 +106,12 @@ class VisorOperaciones extends PolymerElement {
             <div class="col-md-3" align="rigth"><input type="number" name="amount" min="1" max="999999999" step="0.01" value="{{amount::input}}" style="margin-top:3px"/></div>
         </div>
 
-
         <br><br><br>
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-5" align="center"><button on-click="doOper" class="btn btn-info">Aceptar</button></div>
+            <div class="col-md-5"></div>
+            <div class="col-md-2" align="rigth">
+                <button on-click="doOper" class="btn btn-info">Aceptar</button>&nbsp;<button on-click="exitOper" class="btn btn-info">Volver</button>
+            </div>
         </div>
 
       </span>
@@ -118,13 +119,11 @@ class VisorOperaciones extends PolymerElement {
       <span hidden$="[[!isDoOper]]">
 
           <div class="row">
-              <div class="col-md-4"></div>
-              <div class="col-md-5" align="rigth">Operación realizada.</div>
+              <div class="col-md-12" align="center"><h5>Operación realizada con éxito!</h5></div>
           </div>
           <br><br><br>
           <div class="row">
-              <div class="col-md-4"></div>
-              <div class="col-md-5" align="center"><button on-click="exitOper" class="btn btn-info">Continuar</button></div>
+              <div class="col-md-12" align="center"><button on-click="exitOper" class="btn btn-info">Continuar</button></div>
           </div>
 
       </span>
@@ -135,6 +134,7 @@ class VisorOperaciones extends PolymerElement {
               handle-as="json"
               content-type="application/json"
               method="POST"
+              headers={{headers}}
               on-response="manageAJAXResponse"
               on-error="showErrordoOper"
         >
@@ -147,7 +147,8 @@ class VisorOperaciones extends PolymerElement {
                   url="http://localhost:3000/vibank/v1/accounts/{{idUser}}"
                   handle-as="json"
                   content-type="application/json"
-                  on-response="showDataAccount"
+                  headers={{headers}}
+                  on-response="showDataAccounts"
                   on-error="showErrorGetAccounts"
               >
               </iron-ajax>
@@ -193,6 +194,13 @@ class VisorOperaciones extends PolymerElement {
           value: false
       },route: {
           type: Object
+      },headers: {
+          type: Object,
+          value: { authorization: {
+                    type: String
+                  }
+
+                }
       }
     };
   } // End properties
@@ -202,26 +210,20 @@ class VisorOperaciones extends PolymerElement {
   }
 
   showErrordoOper(error) {
-    console.log("Hubo un error al realizar la operación");
-    console.log(error);
-    console.log(error.detail.request.xhr.response);
+    alert("Se ha producido un error, inténtelo de nuevo.");
   }
 
-  showDataAccount(data) {
+  showDataAccounts(data) {
       this.userAccounts = data.detail.response;
   }
 
   showErrorGetAccounts(error) {
-    console.log("Hubo un error al obtener las cuentas");
-    console.log(error);
-    console.log(error.detail.request.xhr.response);
-
-    this.userAccounts = [];
+      this.userAccounts = [];
   }
 
   doOper() {
 
-    //validations
+    //validaciones de inputs de entrada
 
     if (this.operType == 3 || this.operType == 4){
 
@@ -232,17 +234,19 @@ class VisorOperaciones extends PolymerElement {
                return;
             }
 
-            if (this.destinationName === undefined || this.destinationName == ""){
+                    if (this.destinationName === undefined || this.destinationName == ""){
                alert("Destinatario no informado");
                return;
             }
         }
 
         if (this.operType == 4){
+
             if (this.$.selectAccount.value === undefined || this.$.selectAccount.value == ""){
                alert("IBAN no informado");
                return;
             }
+
         }
 
         if (this.concept === undefined || this.concept == ""){
@@ -265,37 +269,36 @@ class VisorOperaciones extends PolymerElement {
     //end validations
 
     if (this.operType == 1 || this.operType == 2){
-      var operData = {
-          "idAccount":this.idAccount,
-          "operType":this.operType,
-          "amount":this.amount
-      }
+        var operData = {
+            "idAccount":this.idAccount,
+            "operType":this.operType,
+            "amount":this.amount
+        }
     }
 
     if (this.operType == 3){
-      var operData = {
-          "idAccount":this.idAccount,
-          "operType":this.operType,
-          "amount":this.amount,
-          "IBAN":this.IBAN,
-          "concept":this.concept,
-          "destinationName":this.destinationName
-      }
+        var operData = {
+            "idAccount":this.idAccount,
+            "operType":this.operType,
+            "amount":this.amount,
+            "IBAN":this.IBAN,
+            "concept":this.concept,
+            "destinationName":this.destinationName
+        }
     }
 
     if (this.operType == 4){
-      var operData = {
-          "idAccount":this.idAccount,
-          "operType":this.operType,
-          "amount":this.amount,
-          "IBAN":this.$.selectAccount.value,
-          "concept":this.concept,
-      }
+        var operData = {
+            "idAccount":this.idAccount,
+            "operType":this.operType,
+            "amount":this.amount,
+            "IBAN":this.$.selectAccount.value,
+            "concept":this.concept,
+        }
     }
 
     this.$.doOper.body = JSON.stringify(operData);
     this.$.doOper.generateRequest();
-    console.log("el cuerpo de la oper es: " + this.$.doOper.body);
 
   }
 

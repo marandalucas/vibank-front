@@ -30,6 +30,7 @@ class visorLogout extends PolymerElement {
         url="http://localhost:3000/vibank/v1/logout/{{idUser}}"
         content-type="application/json"
         method="POST"
+        headers={{headers}}
         on-response="manageAJAXResponse"
         on-error="showError"
       >
@@ -47,6 +48,14 @@ class visorLogout extends PolymerElement {
       },
       route: {
         type: Object
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End Properties
@@ -63,6 +72,8 @@ class visorLogout extends PolymerElement {
 
   manageAJAXResponse(data) {
 
+
+      localStorage.removeItem("token");
       this.set('route.path', '/visor-login');
 
       this.dispatchEvent(

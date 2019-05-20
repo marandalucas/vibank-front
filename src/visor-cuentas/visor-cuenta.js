@@ -27,6 +27,7 @@ class VisorCuenta extends PolymerElement {
             id="getAccount"
             url="http://localhost:3000/vibank/v1/account/{{idAccount}}"
             handle-as="json"
+            headers={{headers}}
             on-response="showDataAccount"
           >
           </iron-ajax>
@@ -48,6 +49,14 @@ class VisorCuenta extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
     };
   } // End properties

@@ -66,7 +66,7 @@ class visorCuentas extends PolymerElement {
 
       <app-location route="{{route}}"></app-location>
 
-      <br><br><br><br>
+      <br>
 
       <div class="row">
           <div class="col-md-10">
@@ -109,8 +109,7 @@ class visorCuentas extends PolymerElement {
             id="getUserAccounts"
             url="http://localhost:3000/vibank/v1/accounts/{{idUser}}"
             handle-as="json"
-            authorization: ""
-            headers='{"authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impjb2xsYWRvQGdtYWlsLmNvbSIsImlhdCI6MTU1ODIyNzc0NiwiZXhwIjoxNTU4MjMxMzQ2fQ.NGyPnavI4NhJoepJh-aSP7ErEli0GoIAuEGGM40ZoxY"}'
+            headers={{headers}}
             on-response="showDataUserAccounts"
             on-error="showError"
           >
@@ -134,7 +133,16 @@ class visorCuentas extends PolymerElement {
       doRefresh: {
         type: Boolean,
         value: false
+      },
+      headers: {
+        type: Object,
+        value: { authorization: {
+                  type: String
+                }
+
+              }
       }
+
     };
   } // End properties
 

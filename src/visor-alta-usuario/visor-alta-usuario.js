@@ -130,6 +130,7 @@ class visorAltaUsuario extends PolymerElement {
 
   manageAJAXResponse(data) {
 
+      localStorage.setItem("token", "Bearer " + data.detail.response.token);
       this.isSignUp = true;
       this.idUser = data.detail.response.idUser;
 
