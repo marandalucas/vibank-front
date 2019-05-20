@@ -53,6 +53,7 @@ pipelines:
             # build and test the Node app
             - npm install
             - npm run build:prod
+            - find ./build/ -type f -print0 | xargs -0 sed -i 's/http:\/\/localhost:3000/https:\/\/api.vibank.tk/g'
           artifacts: # defining the artifacts to be passed to each future step.
               - build/**
       - step:
